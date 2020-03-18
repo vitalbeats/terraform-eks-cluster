@@ -51,9 +51,11 @@ KUBECONFIG
 }
 
 output "aws_auth" {
+  description = "A kubernetes ConfigMap that applies role mappings to allow nodes to register with the cluster"
   value = local.aws_auth
 }
 
 output "kubeconfig" {
+  description = "A generated kubeconfig for accessing the cluster"
   value = local.kubeconfig
 }
