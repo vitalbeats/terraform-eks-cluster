@@ -3,7 +3,7 @@
 #
 
 provider "aws" {
-  version = "~2.0"
+  version = "~> 2.0"
 }
 
 # Using these data sources allows the configuration to be
