@@ -44,16 +44,6 @@ resource "aws_security_group_rule" "cluster_https_worker_ingress" {
   type                     = "ingress"
 }
 
-resource "aws_security_group_rule" "workstation_https_ingress" {
-  description       = "Allow workstation to communicate with the EKS cluster API."
-  protocol          = "tcp"
-  cidr_blocks       = [local.workstation-external-cidr]
-  security_group_id = aws_security_group.vb-cluster.id
-  from_port         = 443
-  to_port           = 443
-  type              = "ingress"
-}
-
 # Worker nodes Security Rules
 resource "aws_security_group_rule" "workers_egress_internet" {
   description       = "Allow nodes egress access to the Internet."
