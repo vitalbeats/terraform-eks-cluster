@@ -36,6 +36,7 @@ resource "aws_iam_role_policy_attachment" "vb-cluster-AmazonEKSServicePolicy" {
 resource "aws_eks_cluster" "vb" {
   name     = var.cluster-name
   role_arn = aws_iam_role.vb-cluster.arn
+  version  = "1.15"
 
   vpc_config {
     security_group_ids = [aws_security_group.vb-cluster.id]
