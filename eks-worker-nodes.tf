@@ -41,8 +41,8 @@ resource "aws_eks_node_group" "ng-workers" {
   cluster_name    = aws_eks_cluster.vb.name
   node_group_name = "ng-workers"
   node_role_arn   = aws_iam_role.vb-node.arn
-  subnet_ids      = aws_subnet.vb-private[*].id
-  instance_types  = ["t3.medium"]
+  subnet_ids      = aws_subnet.vb-public[*].id
+  instance_types  = ["t3.xlarge"]
 
   scaling_config {
     desired_size = 2
