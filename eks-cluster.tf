@@ -40,7 +40,7 @@ resource "aws_eks_cluster" "vb" {
 
   vpc_config {
     security_group_ids = [aws_security_group.vb-cluster.id]
-    subnet_ids         = concat(aws_subnet.vb-public[*].id)
+    subnet_ids         = concat(aws_subnet.vb-public[*].id, aws_subnet.vb-private[*].id)
   }
 
   depends_on = [
