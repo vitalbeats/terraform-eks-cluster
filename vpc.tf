@@ -19,21 +19,6 @@ resource "aws_vpc" "vb" {
   )
 }
 
-# Private subnets
-resource "aws_subnet" "vb-private" {
-  count = 3
-
-  availability_zone = data.aws_availability_zones.available.names[count.index]
-  cidr_block        = "10.0.${count.index}.0/24"
-  vpc_id            = aws_vpc.vb.id
-
-  tags = map(
-    "Name", "${var.cluster-name}/SubnetPrivate-${data.aws_availability_zones.available.names[count.index]}",
-    "kubernetes.io/cluster/${var.cluster-name}", "shared",
-    "kubernetes.io/role/internal-elb", 1
-  )
-}
-
 # Public subnets
 resource "aws_subnet" "vb-public" {
   count = 3
