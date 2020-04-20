@@ -16,7 +16,10 @@ resource "local_file" "aws_auth" {
   content  = local.aws_auth
   filename = "${path.cwd}/output/${var.cluster-name}/aws-auth.yaml"
 
-  depends_on = [null_resource.output]
+  depends_on = [
+    null_resource.output,
+    aws_iam_role.vb-node,
+  ]
 }
 
 resource "null_resource" "kubectl" {
