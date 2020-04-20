@@ -7,14 +7,9 @@ variable "cluster-name" {
   type    = string
 }
 
-variable "cluster-region" {
-  description = "The AWS region to deploy the cluster into"
-  type    = string
-}
-
 variable "enable-kubectl" {
   default     = true
-  description = "When enabled, it will install kubectl context."
+  description = "When enabled, it will install kubectl context into the current users kube/config."
 }
 
 variable "enable-calico" {

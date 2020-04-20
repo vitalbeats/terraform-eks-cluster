@@ -1,20 +1,20 @@
 # Set up kubectl to work properly
 resource "null_resource" "output" {
   provisioner "local-exec" {
-    command = "mkdir -p ${path.root}/output/${var.cluster-name}"
+    command = "mkdir -p ${path.cwd}/output/${var.cluster-name}"
   }
 }
 
 resource "local_file" "kubeconfig" {
   content  = local.kubeconfig
-  filename = "${path.root}/output/${var.cluster-name}/kubeconfig-${var.cluster-name}"
+  filename = "${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name}"
 
   depends_on = [null_resource.output]
 }
 
 resource "local_file" "aws_auth" {
   content  = local.aws_auth
-  filename = "${path.root}/output/${var.cluster-name}/aws-auth.yaml"
+  filename = "${path.cwd}/output/${var.cluster-name}/aws-auth.yaml"
 
   depends_on = [null_resource.output]
 }
@@ -28,7 +28,7 @@ resource "null_resource" "kubectl" {
       && kubectl config unset contexts.${var.cluster-name} \
       && kubectl config unset clusters.${var.cluster-name} \
       && KUBECONFIG=~/.kube/config:./output/${var.cluster-name}/kubeconfig-${var.cluster-name} kubectl config view --flatten > ./output/${var.cluster-name}/kubeconfig_merged \
-      && mv ./output/${var.cluster-name}/kubeconfig_merged ~/.kube/config \
+      && mv ${path.cwd}/output/${var.cluster-name}/kubeconfig_merged ~/.kube/config \
       && kubectl config use-context ${var.cluster-name}
     COMMAND
   }
@@ -45,7 +45,7 @@ resource "null_resource" "kubectl" {
 
 resource "null_resource" "aws_auth" {
   provisioner "local-exec" {
-    command = "kubectl apply --kubeconfig=${path.root}/output/${var.cluster-name}/kubeconfig-${var.cluster-name} -f ${path.root}/output/${var.cluster-name}/aws-auth.yaml"
+    command = "kubectl apply --kubeconfig=${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name} -f ${path.cwd}/output/${var.cluster-name}/aws-auth.yaml"
   }
 
   triggers = {
