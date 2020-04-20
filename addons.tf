@@ -25,3 +25,17 @@ resource "null_resource" "dashboard" {
 
   depends_on = [aws_eks_node_group.ng-workers, null_resource.kubectl]
 }
+
+resource "null_resource" "ingress" {
+  count = var.enable-ingress ? 1 : 0
+
+  provisioner "local-exec" {
+    command = "./${path.module}/deploy-ingress.sh ${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name} ${var.ingress-acm-arn}"
+  }
+
+  triggers = {
+    kubeconfig_rendered = local.kubeconfig
+  }
+
+  depends_on = [aws_eks_node_group.ng-workers, null_resource.kubectl]
+}
