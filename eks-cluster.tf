@@ -50,7 +50,7 @@ resource "aws_eks_cluster" "vb" {
 }
 
 resource "aws_iam_openid_connect_provider" "vb" {
-  url = aws_eks_cluster.vb.identity.oidc[0].issuer
+  url = aws_eks_cluster.vb.identity.0.oidc.0.issuer
 
   client_id_list = [
     "sts.amazonaws.com"
