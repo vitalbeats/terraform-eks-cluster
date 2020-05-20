@@ -36,7 +36,7 @@ resource "aws_iam_role_policy_attachment" "vb-cluster-AmazonEKSServicePolicy" {
 resource "aws_eks_cluster" "vb" {
   name     = var.cluster-name
   role_arn = aws_iam_role.vb-cluster.arn
-  version  = "1.15"
+  version  = "1.16"
 
   vpc_config {
     security_group_ids = [aws_security_group.vb-cluster.id]
@@ -48,3 +48,18 @@ resource "aws_eks_cluster" "vb" {
     aws_iam_role_policy_attachment.vb-cluster-AmazonEKSServicePolicy,
   ]
 }
+
+resource "aws_iam_openid_connect_provider" "vb" {
+  url = aws_eks_cluster.vb.identity.oidc[0].issuer
+
+  client_id_list = [
+    "sts.amazonaws.com"
+  ]
+
+  thumbprint_list = []
+
+  depends_on = [
+    aws_eks_cluster.vb
+  ]
+}
+
