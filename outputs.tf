@@ -34,11 +34,6 @@ contexts:
   name: ${aws_eks_cluster.vb.name}
 current-context: ${aws_eks_cluster.vb.name}
 kind: Config
-preferences:
-  calico: ${var.enable-calico}
-  dashboard: ${var.enable-dashboard}
-  ingress: ${var.enable-ingress}
-  secrets-manager: ${var.enable-secrets-manager}
 users:
 - name: ${aws_eks_cluster.vb.name}
   user:
