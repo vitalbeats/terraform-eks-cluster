@@ -56,7 +56,7 @@ resource "aws_iam_openid_connect_provider" "vb" {
     "sts.amazonaws.com"
   ]
 
-  thumbprint_list = []
+  thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da2b0ab7280"]
 
   depends_on = [
     aws_eks_cluster.vb
