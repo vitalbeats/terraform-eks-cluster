@@ -100,7 +100,7 @@ resource "null_resource" "secrets-manager" {
   count = var.enable-secrets-manager ? 1 : 0
 
   provisioner "local-exec" {
-    command = "${path.module}/deploy-secrets-manager.sh ${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name} ${path.module} ${data.aws_region} ${aws_iam_role.secrets-manager-role.name}"
+    command = "${path.module}/deploy-secrets-manager.sh ${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name} ${path.module} ${data.aws_region.current.name} ${aws_iam_role.secrets-manager-role.0.name}"
   }
 
   triggers = {
