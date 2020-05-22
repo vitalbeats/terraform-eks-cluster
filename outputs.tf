@@ -37,6 +37,8 @@ kind: Config
 preferences:
   calico: ${var.enable-calico}
   dashboard: ${var.enable-dashboard}
+  ingress: ${var.enable-ingress}
+  secrets-manager: ${var.enable-secrets-manager}
 users:
 - name: ${aws_eks_cluster.vb.name}
   user:
@@ -53,4 +55,9 @@ KUBECONFIG
 output "kubeconfig" {
   description = "A generated kubeconfig for accessing the cluster"
   value = local.kubeconfig
+}
+
+output "cluster_oidc_provider" {
+  description = "The OIDC Provider Identifier, used to assign IAM roles to service accounts"
+  value = trimprefix(aws_eks_cluster.vb.identity.0.oidc.0.issuer, "https://")
 }
