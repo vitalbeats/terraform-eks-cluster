@@ -53,10 +53,7 @@ locals {
 }
 
 resource "aws_iam_role" "secrets-manager-role" {
-  count       = var.enable-secrets-manager ? 1 : 0
-  path        = "/${var.cluster-name}/"
-  name        = "kubernetes-secrets-manager"
-  description = "The kubernetes secrets manager's required permissions"
+  count = var.enable-secrets-manager ? 1 : 0
 
   assume_role_policy = <<EOF
 {
