@@ -39,3 +39,59 @@ resource "null_resource" "ingress" {
 
   depends_on = [aws_eks_node_group.ng-workers, null_resource.kubectl]
 }
+
+resource "kubernetes_namespace" "secrets-manager" {
+  count = var.enable-secrets-manager ? 1 : 0
+
+  metadata = {
+    name = "aws-secrets-manager"
+  }
+}
+
+locals {
+  oidc_provider = trimprefix(aws_eks_cluster.vb.identity.0.oidc.0.issuer, "https://")
+}
+
+resource "aws_iam_role" "secrets-manager-role" {
+  count       = var.enable-secrets-manager ? 1 : 0
+  path        = "/${var.cluster-name}/"
+  name        = "kubernetes-secrets-manager"
+  description = "The kubernetes secrets manager's required permissions"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${local.oidc_provider}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${local.oidc_provider}:sub": "system:serviceaccount:aws-secrets-manager:aws-secrets-manager"
+        }
+      }
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "secrets-manager-assume-role-policy" {
+  count = var.enable-secrets-manager ? 1 : 0
+  role  = aws_iam_role.secrets-manager-role.id
+  policy =<<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Resource": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/secrets/${var.cluster-name}/*"
+        }
+    ]
+}
+EOF
+}
