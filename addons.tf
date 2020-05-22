@@ -81,7 +81,7 @@ EOF
 
 resource "aws_iam_role_policy" "secrets-manager-assume-role-policy" {
   count = var.enable-secrets-manager ? 1 : 0
-  role  = aws_iam_role.secrets-manager-role.id
+  role  = aws_iam_role.secrets-manager-role[count.index].id
   policy =<<EOF
 {
     "Version": "2012-10-17",
