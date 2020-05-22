@@ -31,3 +31,8 @@ variable "ingress-acm-arn" {
   default     = ""
   description = "When a non-empty value, it will enable TLS Ingresses backed by an ACM certificate."
 }
+
+variable "enable-secrets-manager" {
+  default     = true
+  description = "When enabled, it will deploy an ExternalSecrets manager linking to AWS Secrets Manager."
+}

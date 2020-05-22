@@ -43,7 +43,7 @@ resource "null_resource" "ingress" {
 resource "kubernetes_namespace" "secrets-manager" {
   count = var.enable-secrets-manager ? 1 : 0
 
-  metadata = {
+  metadata {
     name = "aws-secrets-manager"
   }
 }
