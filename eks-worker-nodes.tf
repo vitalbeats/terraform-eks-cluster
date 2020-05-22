@@ -5,6 +5,7 @@
 #
 
 resource "aws_iam_role" "vb-node" {
+  name               = "${var.cluster-name}-AWSServices"
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",

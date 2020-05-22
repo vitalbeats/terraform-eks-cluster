@@ -4,6 +4,7 @@
 #  * EKS Cluster
 
 resource "aws_iam_role" "vb-cluster" {
+  name = "${var.cluster-name}-EKSServiceMgmt"
 
   assume_role_policy = <<POLICY
 {
