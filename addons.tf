@@ -88,7 +88,7 @@ resource "aws_iam_role_policy" "secrets-manager-assume-role-policy" {
     "Statement": [
         {
             "Effect": "Allow",
-            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Action": "sts:AssumeRole",
             "Resource": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/secrets/${var.cluster-name}/*"
         }
     ]
