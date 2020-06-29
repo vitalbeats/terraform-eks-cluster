@@ -65,7 +65,7 @@ resource "null_resource" "letsencrypt-config" {
     kubeconfig_rendered = local.kubeconfig
   }
 
-  depends_on = [aws_eks_node_group.ng-workers, null_resource.kubectl, null_resource.letsencrypt[count.index]]
+  depends_on = [aws_eks_node_group.ng-workers, null_resource.kubectl, null_resource.letsencrypt]
 }
 
 resource "kubernetes_namespace" "secrets-manager" {
