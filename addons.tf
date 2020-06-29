@@ -35,6 +35,7 @@ resource "null_resource" "ingress" {
 
   triggers = {
     kubeconfig_rendered = local.kubeconfig
+    acm_chosen = var.ingress-acm-arn
   }
 
   depends_on = [aws_eks_node_group.ng-workers, null_resource.kubectl]
