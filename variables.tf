@@ -27,6 +27,16 @@ variable "enable-ingress" {
   description = "When enabled, it will deploy an Ingress controller."
 }
 
+variable "enable-letsencrypt" {
+  default     = false
+  description = "When enabled, it will deploy a LetsEncrypt certificate controller."
+}
+
+variable "letsencrypt-email" {
+  default     = ""
+  description = "When deplying a LetsEncrypt certificate controller, this is the email used to register certificates."
+}
+
 variable "ingress-acm-arn" {
   default     = ""
   description = "When a non-empty value, it will enable TLS Ingresses backed by an ACM certificate."

@@ -40,6 +40,34 @@ resource "null_resource" "ingress" {
   depends_on = [aws_eks_node_group.ng-workers, null_resource.kubectl]
 }
 
+resource "null_resource" "letsencrypt" {
+  count = var.enable-letsencrypt ? 1 : 0
+
+  provisioner "local-exec" {
+    command = "kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml --kubeconfig ${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name}"
+  }
+
+  triggers = {
+    kubeconfig_rendered = local.kubeconfig
+  }
+
+  depends_on = [aws_eks_node_group.ng-workers, null_resource.kubectl]
+}
+
+resource "null_resource" "letsencrypt-config" {
+  count = var.enable-letsencrypt ? 1 : 0
+
+  provisioner "local-exec" {
+    command = "${path.module}/letsencrypt-config.sh ${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name} ${var.letsencrypt-email}"
+  }
+
+  triggers = {
+    kubeconfig_rendered = local.kubeconfig
+  }
+
+  depends_on = [aws_eks_node_group.ng-workers, null_resource.kubectl, null_resource.letsencrypt[count.index]]
+}
+
 resource "kubernetes_namespace" "secrets-manager" {
   count = var.enable-secrets-manager ? 1 : 0
 
