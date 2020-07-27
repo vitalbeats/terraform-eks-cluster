@@ -4,7 +4,12 @@
 
 variable "cluster-name" {
   description = "The name of the EKS cluster and resources in AWS"
-  type    = string
+  type        = string
+}
+
+variable "ec2_ssh_key" {
+  description = "The SSH key to bind for operational access"
+  type        = string
 }
 
 variable "enable-kubectl" {
