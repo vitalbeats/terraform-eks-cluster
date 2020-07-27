@@ -43,12 +43,15 @@ resource "aws_eks_node_group" "ng-workers" {
   node_role_arn   = aws_iam_role.vb-node.arn
   subnet_ids      = aws_subnet.vb-public[*].id
   instance_types  = ["t3.xlarge"]
-  ec2_ssh_key     = var.ec2-ssh-key
 
   scaling_config {
     desired_size = 3
     max_size     = 3
     min_size     = 1
+  }
+
+  remote_access {
+    ec2_ssh_key = var.ec2-ssh-key
   }
 
   depends_on = [
