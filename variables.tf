@@ -7,7 +7,7 @@ variable "cluster-name" {
   type        = string
 }
 
-variable "ec2_ssh_key" {
+variable "ec2-ssh-key" {
   description = "The SSH key to bind for operational access"
   type        = string
 }
