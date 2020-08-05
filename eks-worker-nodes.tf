@@ -37,6 +37,61 @@ resource "aws_iam_role_policy_attachment" "vb-node-AmazonEC2ContainerRegistryRea
   role       = aws_iam_role.vb-node.name
 }
 
+resource "aws_iam_role_policy_attachment" "vb-node-AmazonCloudWatch" {
+  policy_arn = aws_iam_policy.vb-node-AmazonCloudWatch.arn
+  role       = aws_iam_role.vb-node.name
+}
+
+resource "aws_iam_policy" "vb-node-AmazonCloudWatch" {
+  name = "${var.cluster-name}-AmazonCloudWatch"
+  description = "Used to send logs to CloudWatch for EKS"
+  path = "/${var.cluster-name}/"
+
+  policy = << EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:DescribeQueries",
+                "logs:GetLogRecord",
+                "logs:PutDestinationPolicy",
+                "logs:StopQuery",
+                "logs:TestMetricFilter",
+                "logs:DeleteDestination",
+                "logs:CreateLogGroup",
+                "logs:GetLogDelivery",
+                "logs:ListLogDeliveries",
+                "logs:CreateLogDelivery",
+                "logs:DeleteResourcePolicy",
+                "logs:PutResourcePolicy",
+                "logs:DescribeExportTasks",
+                "logs:GetQueryResults",
+                "logs:UpdateLogDelivery",
+                "logs:CancelExportTask",
+                "logs:DeleteLogDelivery",
+                "logs:PutDestination",
+                "logs:DescribeResourcePolicies",
+                "logs:DescribeDestinations"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "logs:*",
+            "Resource": "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/containerinsights/${var.cluster-name}/*:log-stream:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "logs:*",
+            "Resource": "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/containerinsights/${var.cluster-name}/*"
+        }
+    ]
+}
+EOF
+}
+
 resource "aws_eks_node_group" "ng-workers" {
   cluster_name    = aws_eks_cluster.vb.name
   node_group_name = "ng-workers"
