@@ -51,3 +51,8 @@ variable "enable-secrets-manager" {
   default     = true
   description = "When enabled, it will deploy an ExternalSecrets manager linking to AWS Secrets Manager."
 }
+
+variable "enable-app-cloudwatch" {
+  default     = true
+  description = "When enabled, it will deploy FluentD to forward container logs to AWS CloudWatch."
+}

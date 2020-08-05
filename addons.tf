@@ -41,6 +41,21 @@ resource "null_resource" "ingress" {
   depends_on = [aws_eks_node_group.ng-workers, null_resource.kubectl]
 }
 
+resource "null_resource" "app-cloudwatch" {
+  count = var.enable-app-cloudwatch ? 1 : 0
+
+  provisioner "local-exec" {
+    command = "${path.module}/deploy-app-cloudwatch.sh ${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name} ${var.cluster-name} ${data.aws_region.current.name}"
+  }
+
+  triggers = {
+    kubeconfig_rendered = local.kubeconfig
+    acm_chosen = var.ingress-acm-arn
+  }
+
+  depends_on = [aws_eks_node_group.ng-workers, null_resource.kubectl]
+}
+
 resource "null_resource" "letsencrypt" {
   count = var.enable-letsencrypt ? 1 : 0
 
