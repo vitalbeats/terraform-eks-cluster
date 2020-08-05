@@ -53,38 +53,9 @@ resource "aws_iam_policy" "vb-node-AmazonCloudWatch" {
         {
             "Effect": "Allow",
             "Action": [
-                "logs:DescribeQueries",
-                "logs:GetLogRecord",
-                "logs:PutDestinationPolicy",
-                "logs:StopQuery",
-                "logs:TestMetricFilter",
-                "logs:DeleteDestination",
-                "logs:CreateLogGroup",
-                "logs:GetLogDelivery",
-                "logs:ListLogDeliveries",
-                "logs:CreateLogDelivery",
-                "logs:DeleteResourcePolicy",
-                "logs:PutResourcePolicy",
-                "logs:DescribeExportTasks",
-                "logs:GetQueryResults",
-                "logs:UpdateLogDelivery",
-                "logs:CancelExportTask",
-                "logs:DeleteLogDelivery",
-                "logs:PutDestination",
-                "logs:DescribeResourcePolicies",
-                "logs:DescribeDestinations"
+                "logs:*"
             ],
             "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "logs:*",
-            "Resource": "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/containerinsights/${var.cluster-name}/*:log-stream:*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "logs:*",
-            "Resource": "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/containerinsights/${var.cluster-name}/*"
         }
     ]
 }
