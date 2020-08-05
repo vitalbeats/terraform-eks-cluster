@@ -43,11 +43,10 @@ resource "aws_iam_role_policy_attachment" "vb-node-AmazonCloudWatch" {
 }
 
 resource "aws_iam_policy" "vb-node-AmazonCloudWatch" {
-  name = "${var.cluster-name}-AmazonCloudWatch"
+  name        = "${var.cluster-name}-AmazonCloudWatch"
   description = "Used to send logs to CloudWatch for EKS"
-  path = "/${var.cluster-name}/"
 
-  policy = << EOF
+  policy =<<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
