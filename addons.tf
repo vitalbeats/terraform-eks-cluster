@@ -153,3 +153,17 @@ resource "null_resource" "secrets-manager" {
 
   depends_on = [aws_eks_node_group.ng-workers, null_resource.kubectl]
 }
+
+resource "null_resource" "datadog" {
+  count = var.enable-datadog ? 1 : 0
+
+  provisioner "local-exec" {
+    command = "${path.module}/deploy-datadog.sh ${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name} ${var.cluster-name} ${var.datadog-api-key} ${var.datadog-app-key} ${path.module}"
+  }
+
+  triggers = {
+    kubeconfig_rendered = local.kubeconfig
+  }
+
+  depends_on = [aws_eks_node_group.ng-workers, null_resource.kubectl]
+}

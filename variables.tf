@@ -56,3 +56,18 @@ variable "enable-app-cloudwatch" {
   default     = true
   description = "When enabled, it will deploy FluentD to forward container logs to AWS CloudWatch."
 }
+
+variable "enable-datadog" {
+  default     = true
+  description = "When enabled, it will deploy DataDog to monitor the cluster."
+}
+
+variable "datadog-api-key" {
+  default     = ""
+  description = "The API key DataDog needs to connect to our account."
+}
+
+variable "datadog-app-key" {
+  default     = ""
+  description = "The App API key DataDog needs to connect to our account."
+}

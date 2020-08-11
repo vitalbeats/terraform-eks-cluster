@@ -1,0 +1,42 @@
+#!/bin/sh
+
+KUBECONFIG=$1
+CLUSTER_NAME=$2
+DATADOG_API_KEY=$3
+DATADOG_APP_KEY=$4
+MODULE_DIR=$5
+DATADOG_SHARED_SECRET=$(echo -n "${CLUSTER_NAME} ${CLUSTER_NAME} ${CLUSTER_NAME}" | base64)
+
+kubectl get customresourcedefinition.apiextensions.k8s.io/catalogsources.operators.coreos.com --kubeconfig ${KUBECONFIG} > /dev/null 2> /dev/null
+if [ "$?" -ne "0" ]; then
+    ${MODULE_DIR}/operator-install.sh 0.15.1 ${KUBECONFIG}
+fi
+kubectl apply -f https://operatorhub.io/install/datadog-operator.yaml --kubeconfig ${KUBECONFIG}
+kubectl apply -f ${MODULE_DIR}/kube-state-metrics.yaml --kubeconfig ${KUBECONFIG}
+kubectl apply --kubeconfig ${KUBECONFIG} -f - << EOF
+apiVersion: datadoghq.com/v1alpha1
+kind: DatadogAgent
+metadata:
+  name: datadog-agent
+spec:
+  credentials:
+    apiKey: ${DATADOG_API_KEY}
+    appKey: ${DATADOG_APP_KEY}
+    token: ${DATADOG_SHARED_SECRET}
+  agent:
+    image:
+      name: 'datadog/agent:latest'
+    config:
+      tolerations:
+        - operator: Exists
+  clusterAgent:
+    image:
+      name: 'datadog/cluster-agent:latest'
+    config:
+      metricsProviderEnabled: true
+      clusterChecksRunnerEnabled: true
+    replicas: 2
+  clusterChecksRunner:
+    image:
+      name: 'datadog/agent:latest'
+EOF
