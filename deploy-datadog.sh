@@ -4,7 +4,8 @@ KUBECONFIG=$1
 CLUSTER_NAME=$2
 DATADOG_API_KEY=$3
 DATADOG_APP_KEY=$4
-MODULE_DIR=$5
+DATADOG_SITE=${5:-datadoghq.com}
+MODULE_DIR=$6
 DATADOG_SHARED_SECRET=$(echo -n "${CLUSTER_NAME} ${CLUSTER_NAME} ${CLUSTER_NAME}" | base64)
 
 kubectl get customresourcedefinition.apiextensions.k8s.io/catalogsources.operators.coreos.com --kubeconfig ${KUBECONFIG} > /dev/null 2> /dev/null
@@ -23,6 +24,7 @@ spec:
     apiKey: ${DATADOG_API_KEY}
     appKey: ${DATADOG_APP_KEY}
     token: ${DATADOG_SHARED_SECRET}
+  site: ${DATADOG_SITE}
   agent:
     image:
       name: 'datadog/agent:latest'

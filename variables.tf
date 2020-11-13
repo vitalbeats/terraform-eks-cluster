@@ -71,3 +71,8 @@ variable "datadog-app-key" {
   default     = ""
   description = "The App API key DataDog needs to connect to our account."
 }
+
+variable "datadog-site" {
+  default     = "datadoghq.com"
+  description = "Which DataDog site to send data to. Set to datadoghq.eu for EU region."
+}
