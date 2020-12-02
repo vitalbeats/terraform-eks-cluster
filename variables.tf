@@ -76,3 +76,8 @@ variable "datadog-site" {
   default     = "datadoghq.com"
   description = "Which DataDog site to send data to. Set to datadoghq.eu for EU region."
 }
+
+variable "datadog-notifier" {
+  default     = "devops"
+  description = "Which DataDog user or group to notify of monitor alarms"
+}
