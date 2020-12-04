@@ -31,6 +31,7 @@ spec:
     config:
       tolerations:
         - operator: Exists
+      collectEvents: true
   clusterAgent:
     image:
       name: 'datadog/cluster-agent:latest'
