@@ -10,7 +10,7 @@ DATADOG_SHARED_SECRET=$(echo -n "${CLUSTER_NAME} ${CLUSTER_NAME} ${CLUSTER_NAME}
 
 kubectl get customresourcedefinition.apiextensions.k8s.io/catalogsources.operators.coreos.com --kubeconfig ${KUBECONFIG} > /dev/null 2> /dev/null
 if [ "$?" -ne "0" ]; then
-    ${MODULE_DIR}/operator-install.sh 0.15.1 ${KUBECONFIG}
+    ${MODULE_DIR}/operator-install.sh v0.17.0 ${KUBECONFIG}
 fi
 kubectl apply -f https://operatorhub.io/install/datadog-operator.yaml --kubeconfig ${KUBECONFIG}
 kubectl apply -f ${MODULE_DIR}/kube-state-metrics.yaml --kubeconfig ${KUBECONFIG}
