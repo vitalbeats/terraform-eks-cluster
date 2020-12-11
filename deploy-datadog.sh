@@ -27,19 +27,19 @@ spec:
   site: ${DATADOG_SITE}
   agent:
     image:
-      name: 'datadog/agent:latest'
+      name: 'datadog/agent:7'
     config:
       tolerations:
         - operator: Exists
       collectEvents: true
   clusterAgent:
     image:
-      name: 'datadog/cluster-agent:latest'
+      name: 'datadog/cluster-agent:7'
     config:
       metricsProviderEnabled: true
       clusterChecksRunnerEnabled: true
     replicas: 2
   clusterChecksRunner:
     image:
-      name: 'datadog/agent:latest'
+      name: 'datadog/agent:7'
 EOF
