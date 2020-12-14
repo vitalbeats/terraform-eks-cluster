@@ -91,7 +91,8 @@ resource "datadog_monitor" "pending-pods" {
 
   query = "avg(last_1d):anomalies(sum:kubernetes_state.pod.status_phase{phase:pending,cluster_name:${var.cluster-name}} by {cluster_name}, 'agile', 2, direction='above', alert_window='last_1h', interval=300, count_default_zero='true', seasonality='daily') >= 1"
 
-  notify_no_data    = true
+  notify_no_data      = false
+  require_full_window = false
 
   lifecycle {
     ignore_changes = [silenced]
@@ -108,7 +109,8 @@ resource "datadog_monitor" "failed-pods" {
 
   query = "avg(last_1d):anomalies(sum:kubernetes_state.pod.status_phase{phase:failed,cluster_name:${var.cluster-name}} by {cluster_name}, 'agile', 2, direction='above', alert_window='last_1h', interval=300, count_default_zero='true', seasonality='daily') >= 1"
 
-  notify_no_data    = true
+  notify_no_data      = false
+  require_full_window = false
 
   lifecycle {
     ignore_changes = [silenced]
@@ -125,7 +127,9 @@ resource "datadog_monitor" "restarting-pods" {
 
   query = "change(avg(last_5m),last_5m):max:kubernetes.containers.restarts{cluster_name:${var.cluster-name}} by {cluster_name,kube_namespace,pod_name} >= 1"
 
-  notify_no_data    = true
+  notify_no_data      = false
+  require_full_window = false
+
 
   lifecycle {
     ignore_changes = [silenced]
