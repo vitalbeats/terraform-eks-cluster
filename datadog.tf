@@ -82,3 +82,54 @@ resource "datadog_monitor" "cluster-nodes-pid-pressure" {
 
   tags = ["cluster_name:${var.cluster-name}"]
 }
+
+resource "datadog_monitor" "pending-pods" {
+  count   = var.enable-datadog ? 1 : 0
+  name    = "More pods are stuck in pending on ${var.cluster-name}"
+  type    = "metric alert"
+  message = "Pods on ${var.cluster-name} are increasingly stuck in pending phase. Notify: ${var.datadog-notifier}"
+
+  query = "avg(last_1d):anomalies(sum:kubernetes_state.pod.status_phase{phase:pending,cluster_name:${var.cluster-name}} by {cluster_name}, 'agile', 2, direction='above', alert_window='last_1h', interval=300, count_default_zero='true', seasonality='daily') >= 1"
+
+  notify_no_data    = true
+
+  lifecycle {
+    ignore_changes = [silenced]
+  }
+
+  tags = ["cluster_name:${var.cluster-name}"]
+}
+
+resource "datadog_monitor" "failed-pods" {
+  count   = var.enable-datadog ? 1 : 0
+  name    = "More pods are failing on ${var.cluster-name}"
+  type    = "metric alert"
+  message = "Pods on ${var.cluster-name} are increasingly in the failing phase. Notify: ${var.datadog-notifier}"
+
+  query = "avg(last_1d):anomalies(sum:kubernetes_state.pod.status_phase{phase:failed,cluster_name:${var.cluster-name}} by {cluster_name}, 'agile', 2, direction='above', alert_window='last_1h', interval=300, count_default_zero='true', seasonality='daily') >= 1"
+
+  notify_no_data    = true
+
+  lifecycle {
+    ignore_changes = [silenced]
+  }
+
+  tags = ["cluster_name:${var.cluster-name}"]
+}
+
+resource "datadog_monitor" "restarting-pods" {
+  count   = var.enable-datadog ? 1 : 0
+  name    = "Pods are repeatedly restarting on ${var.cluster-name}"
+  type    = "metric alert"
+  message = "Pods on ${var.cluster-name} are repeatedly restarting. Notify: ${var.datadog-notifier}"
+
+  query = "change(avg(last_5m),last_5m):max:kubernetes.containers.restarts{cluster_name:${var.cluster-name}} by {cluster_name,kube_namespace,pod_name} >= 1"
+
+  notify_no_data    = true
+
+  lifecycle {
+    ignore_changes = [silenced]
+  }
+
+  tags = ["cluster_name:${var.cluster-name}"]
+}
