@@ -21,7 +21,7 @@ resource "datadog_monitor" "cluster-nodes-ready" {
   type    = "metric alert"
   message = "Nodes in ${var.cluster-name} are not ready. Notify: ${var.datadog-notifier}"
 
-  query = "avg(last_5m):sum:kubernetes_state.nodes.by_condition{condition:ready,status:true,cluster_name:${var.cluster-name}} by {status,condition,cluster_name} < 3"
+  query = "avg(last_10m):sum:kubernetes_state.nodes.by_condition{condition:ready,status:true,cluster_name:${var.cluster-name}} by {status,condition,cluster_name} < 3"
 
   notify_no_data    = true
 
@@ -38,7 +38,7 @@ resource "datadog_monitor" "cluster-nodes-disk-pressure" {
   type    = "metric alert"
   message = "Nodes in ${var.cluster-name} are seeing disk pressure. Notify: ${var.datadog-notifier}"
 
-  query = "avg(last_5m):sum:kubernetes_state.nodes.by_condition{condition:diskpressure,status:true,cluster_name:${var.cluster-name}} by {cluster_name} > 0"
+  query = "avg(last_10m):sum:kubernetes_state.nodes.by_condition{condition:diskpressure,status:true,cluster_name:${var.cluster-name}} by {cluster_name} >= 1"
 
   notify_no_data    = true
 
@@ -55,7 +55,7 @@ resource "datadog_monitor" "cluster-nodes-memory-pressure" {
   type    = "metric alert"
   message = "Nodes in ${var.cluster-name} are seeing memory pressure. Notify: ${var.datadog-notifier}"
 
-  query = "avg(last_5m):sum:kubernetes_state.nodes.by_condition{condition:memorypressure,status:true,cluster_name:${var.cluster-name}} by {cluster_name} > 0"
+  query = "avg(last_10m):sum:kubernetes_state.nodes.by_condition{condition:memorypressure,status:true,cluster_name:${var.cluster-name}} by {cluster_name} >= 1"
 
   notify_no_data    = true
 
@@ -72,7 +72,7 @@ resource "datadog_monitor" "cluster-nodes-pid-pressure" {
   type    = "metric alert"
   message = "Nodes in ${var.cluster-name} are seeing pid pressure. Notify: ${var.datadog-notifier}"
 
-  query = "avg(last_5m):sum:kubernetes_state.nodes.by_condition{condition:pidpressure,status:true,cluster_name:${var.cluster-name}} by {cluster_name} > 0"
+  query = "avg(last_10m):sum:kubernetes_state.nodes.by_condition{condition:pidpressure,status:true,cluster_name:${var.cluster-name}} by {cluster_name} >= 1"
 
   notify_no_data    = true
 

@@ -10,7 +10,7 @@ To provision clusters with this repository, you will need the following tools:
 
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 - [AWS IAM Authenticator](https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html)
-- [Terraform](https://www.terraform.io/downloads.html)
+- [Terraform](https://www.terraform.io/downloads.html) - We support terraform version 1.3.x upwards
 
 With these tools installed, you will need to set them up with your AWS IAM credentials. [Login via IAM](https://vitalbeats-engineering.signin.aws.amazon.com/console) and navigate to your user credentials. The URL will be something like [https://console.aws.amazon.com/iam/home?region=eu-west-1#/users/user.name@vitalbeats.com?section=security_credentials](https://console.aws.amazon.com/iam/home?region=eu-west-1#/users). Create a new access key (you are only allowed 2 active at a time), and record the access key ID and secret, you will need this for the next step. Then open a terminal and run:
 
