@@ -53,7 +53,7 @@ variable "enable-secrets-manager" {
 }
 
 variable "enable-app-cloudwatch" {
-  default     = true
+  default     = false
   description = "When enabled, it will deploy FluentD to forward container logs to AWS CloudWatch."
 }
 
