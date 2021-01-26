@@ -38,7 +38,7 @@ resource "datadog_monitor" "cluster-nodes-disk-pressure" {
   type    = "metric alert"
   message = "Nodes in ${var.cluster-name} are seeing disk pressure. Notify: ${var.datadog-notifier}"
 
-  query = "avg(last_10m):sum:kubernetes_state.nodes.by_condition{condition:diskpressure,status:true,cluster_name:${var.cluster-name}} by {cluster_name} >= 1"
+  query = "avg(last_1h):sum:kubernetes_state.nodes.by_condition{condition:diskpressure,status:true,cluster_name:${var.cluster-name}} by {cluster_name} >= 1"
 
   notify_no_data    = true
 
