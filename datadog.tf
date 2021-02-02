@@ -125,7 +125,7 @@ resource "datadog_monitor" "restarting-pods" {
   type    = "metric alert"
   message = "Pods on ${var.cluster-name} are repeatedly restarting. Notify: ${var.datadog-notifier}"
 
-  query = "avg(last_5m):avg:kubernetes.containers.restarts{cluster_name:${var.cluster-name}} by {cluster_name,kube_namespace,pod_name} >= 1"
+  query = "change(avg(last_10m),last_10m):avg:kubernetes.containers.restarts{cluster_name:${var.cluster-name}} by {cluster_name,kube_namespace,pod_name} >= 1"
 
   notify_no_data      = false
   require_full_window = false
