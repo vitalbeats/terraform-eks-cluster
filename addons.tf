@@ -2,7 +2,7 @@ resource "null_resource" "calico" {
   count = var.enable-calico ? 1 : 0
 
   provisioner "local-exec" {
-    command = "kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/release-1.5/config/v1.5/calico.yaml --kubeconfig ${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name}"
+    command = "kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/v1.7.5/config/v1.7/calico.yaml --kubeconfig ${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name}"
   }
 
   triggers = {
@@ -16,7 +16,7 @@ resource "null_resource" "dashboard" {
   count = var.enable-dashboard ? 1 : 0
 
   provisioner "local-exec" {
-    command = "kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc5/aio/deploy/recommended.yaml --kubeconfig ${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name}"
+    command = "kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml --kubeconfig ${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name}"
   }
 
   triggers = {
@@ -60,7 +60,7 @@ resource "null_resource" "letsencrypt" {
   count = var.enable-letsencrypt ? 1 : 0
 
   provisioner "local-exec" {
-    command = "kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml --kubeconfig ${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name}"
+    command = "kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.2/cert-manager.yaml --kubeconfig ${path.cwd}/output/${var.cluster-name}/kubeconfig-${var.cluster-name}"
   }
 
   triggers = {
